@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Profil</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width:900px; margin:32px auto; padding:0 16px; }
+    .profile { display:flex; gap:16px; align-items:center; }
+    img.avatar { width:96px; height:96px; border-radius:50%; object-fit:cover; }
+    .actions { margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; }
+    button, a.button { padding:8px 12px; border-radius:6px; border:1px solid #ccc; background:#f6f6f6; cursor:pointer; text-decoration:none; color:inherit; }
+    button.danger { background:#ffeded; border-color:#ff6b6b; }
+    input[type="text"], input[type="email"] { width:100%; padding:8px; margin-top:6px; box-sizing:border-box; }
+    pre { background:#f6f8fa; padding:12px; border-radius:6px; overflow:auto; white-space:pre-wrap; }
+    .hidden { display:none; }
+  </style>
+</head>
+<body>
+  <h1>Profil</h1>
+
+  <div id="profileContainer">
+    <div class="profile">
+      <img id="avatar" class="avatar hidden" alt="avatar" />
+      <div>
+        <div><strong id="displayName">Učitavanje...</strong></div>
+        <div id="displayEmail"></div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a class="button" id="btnLogout" href="/logout">Odjava</a>
+    </div>
+
+    <section id="ticketsSection" style="margin-top:18px;">
+      <h2 id="currRoundTitle">Učitavanje...</h2>
+      <div id="ticketsInfo">Učitavanje...</div>
+    </section>
+
+    <section id="roundSection" style="margin-top:18px;">
+    <div id="roundInfo">Učitavanje...</div>
+  </section>
+
+  <div class="actions">
+    <a class="button hidden" id="btnPay" href="/form">Kreiraj listić</a>
+  </div>
+
+  </div>
+  <script>
+    async function fetchUser() {
+      const endpoints =  '/user-status';
+      try {
+        const res = await fetch(endpoints, { credentials: 'same-origin' });
+        if (!res.ok) return null;
+        const json = await res.json();
+        if (json && (json.user || json.isAuthenticated)) return json.user || json;
+      } catch (e) {}
+      return null;
+    }
+
+    let user = null;
+    var userId = null;
+    var roundId = null;
+
+    function showUserData(u) {
+      user = u || {};
+      userId = user.sub;
+      document.getElementById('displayName').textContent = user.name || user.nickname || 'User';
+      document.getElementById('displayEmail').textContent = user.email || '';
+      const avatar = document.getElementById('avatar');
+      if (user.picture) {
+        avatar.src = user.picture;
+        avatar.classList.remove('hidden');
+      } else {
+        avatar.classList.add('hidden');
+      }
+
+      fetchTicketsForUser(userId);
+    }
+
+    async function fetchCurrentRound() {
+      const el = document.getElementById('roundInfo');
+      const currRoundTitle = document.getElementById('currRoundTitle');
+
+      el.textContent = 'Učitavanje...';
+      try {
+        const res = await fetch('/currentRoundData', { credentials: 'same-origin' });
+        if (!res.ok) { el.textContent = 'Neuspješno učitavanje trenutnog kola'; return; }
+        const json = await res.json();
+        
+        currRoundTitle.textContent = 'Trenutno kolo ID: ' + (json.roundId != null ? json.roundId : '(none)');
+        const payBtn = document.getElementById('btnPay');
+        const drawn = Array.isArray(json.drawnNumbers) ? json.drawnNumbers : [];
+
+        if (drawn.length > 0) {
+          el.textContent = `Izvučeni brojevi za trenutno kolo: ${drawn.join(', ')}`;
+          if (payBtn) payBtn.classList.add('hidden');
+        } else {
+          el.textContent = 'Nema izvučenih brojeva za trenutno kolo.';
+          if (payBtn) payBtn.classList.remove('hidden'); 
+        }
+      } catch (err) {
+        el.textContent = 'Greška prilikom učitavanja trenutnog kola';
+        console.error(err);
+      }
+    }
+
+    async function fetchTicketsForUser(id) {
+      const infoEl = document.getElementById('ticketsInfo');
+      infoEl.textContent = 'Učitavanje...';
+      try {
+        const res = await fetch(`/tickets/${encodeURIComponent(id)}`, { credentials: 'same-origin' });
+        if (!res.ok) {
+          infoEl.textContent = 'Greška prilikom učitavanja listića';
+          return;
+        }
+        
+        const payBtn = document.getElementById('btnPay');
+        const json = await res.json();
+        if (json.roundId != null) {
+          roundId = json.roundId;
+          const count = (typeof json.count === 'number') ? json.count : (json.count ? Number(json.count) : 0);
+          infoEl.textContent = `Imate ${count} listić${count === 1 ? '' : 'a'}.`;
+          fetchCurrentRound();
+        } 
+        else {
+          infoEl.textContent = 'Trenutno nema aktivnog kola.';
+        }
+
+      } catch (err) {
+        infoEl.textContent = 'Greška prilikom učitavanja listića';
+        console.error(err);
+      }
+    }
+
+    (async () => {
+      const u = await fetchUser();
+      if (!u) { window.location.href = '/'; return; }
+      showUserData(u);
+    })();
+  </script>
+</body>
+</html>

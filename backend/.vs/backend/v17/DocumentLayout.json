@@ -1,0 +1,105 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\ivanc\\source\\repos\\WEB2\\backend\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{806BB530-083C-6AF0-F501-A91C5C70FE20}|backend.esproj|c:\\users\\ivanc\\source\\repos\\web2\\backend\\routes\\auth.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{806BB530-083C-6AF0-F501-A91C5C70FE20}|backend.esproj|solutionrelative:routes\\auth.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{806BB530-083C-6AF0-F501-A91C5C70FE20}|backend.esproj|c:\\users\\ivanc\\source\\repos\\web2\\backend\\controllers\\ticketcontroller.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{806BB530-083C-6AF0-F501-A91C5C70FE20}|backend.esproj|solutionrelative:controllers\\ticketcontroller.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{806BB530-083C-6AF0-F501-A91C5C70FE20}|backend.esproj|c:\\users\\ivanc\\source\\repos\\web2\\backend\\services\\ticketservice.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{806BB530-083C-6AF0-F501-A91C5C70FE20}|backend.esproj|solutionrelative:services\\ticketservice.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{806BB530-083C-6AF0-F501-A91C5C70FE20}|backend.esproj|c:\\users\\ivanc\\source\\repos\\web2\\backend\\.env||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{806BB530-083C-6AF0-F501-A91C5C70FE20}|backend.esproj|solutionrelative:.env||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{806BB530-083C-6AF0-F501-A91C5C70FE20}|backend.esproj|c:\\users\\ivanc\\source\\repos\\web2\\backend\\app.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{806BB530-083C-6AF0-F501-A91C5C70FE20}|backend.esproj|solutionrelative:app.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": ".env",
+              "DocumentMoniker": "C:\\Users\\ivanc\\source\\repos\\WEB2\\backend\\.env",
+              "RelativeDocumentMoniker": ".env",
+              "ToolTip": "C:\\Users\\ivanc\\source\\repos\\WEB2\\backend\\.env",
+              "RelativeToolTip": ".env",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-10-21T11:35:14.724Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "auth.ts",
+              "DocumentMoniker": "C:\\Users\\ivanc\\source\\repos\\WEB2\\backend\\routes\\auth.ts",
+              "RelativeDocumentMoniker": "routes\\auth.ts",
+              "ToolTip": "C:\\Users\\ivanc\\source\\repos\\WEB2\\backend\\routes\\auth.ts",
+              "RelativeToolTip": "routes\\auth.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2025-10-21T13:48:47.847Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ticketService.ts",
+              "DocumentMoniker": "C:\\Users\\ivanc\\source\\repos\\WEB2\\backend\\services\\ticketService.ts",
+              "RelativeDocumentMoniker": "services\\ticketService.ts",
+              "ToolTip": "C:\\Users\\ivanc\\source\\repos\\WEB2\\backend\\services\\ticketService.ts",
+              "RelativeToolTip": "services\\ticketService.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2025-10-20T10:52:49.822Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ticketController.ts",
+              "DocumentMoniker": "C:\\Users\\ivanc\\source\\repos\\WEB2\\backend\\controllers\\ticketController.ts",
+              "RelativeDocumentMoniker": "controllers\\ticketController.ts",
+              "ToolTip": "C:\\Users\\ivanc\\source\\repos\\WEB2\\backend\\controllers\\ticketController.ts",
+              "RelativeToolTip": "controllers\\ticketController.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2025-10-18T11:36:44.672Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "app.js",
+              "DocumentMoniker": "C:\\Users\\ivanc\\source\\repos\\WEB2\\backend\\app.js",
+              "RelativeDocumentMoniker": "app.js",
+              "ToolTip": "C:\\Users\\ivanc\\source\\repos\\WEB2\\backend\\app.js",
+              "RelativeToolTip": "app.js",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABoAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-10-12T11:37:43.998Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

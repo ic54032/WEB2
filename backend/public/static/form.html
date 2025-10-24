@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Uplata listića</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;max-width:720px;margin:32px auto;padding:0 16px}
+    label{display:block;margin-top:12px}
+    input, textarea{width:100%;padding:8px;box-sizing:border-box}
+    .error{color:#c00;margin-top:8px}
+    .success{color:green;margin-top:8px}
+    button{margin-top:12px;padding:8px 12px}
+  </style>
+</head>
+<body>
+  <h1>Uplata listića (Loto 6/45)</h1>
+  <form id="ticketForm">
+    <label>Broj osobne iskaznice ili putovnice (do 20 znakova)
+      <input id="id_number" name="id_number" type="text" maxlength="20" required />
+    </label>
+
+    <label>Brojevi (6–10 brojeva, razdvojeni zarezom, 1–45)
+      <input id="numbers" name="numbers" type="text" placeholder="npr. 3,7,12,23,34,45" required />
+    </label>
+
+    <div class="error" id="error"></div>
+    <div class="success" id="success"></div>
+    <img id="ticketImage" alt="ticket image" style="max-width:100%;display:none;margin-top:12px;" />
+
+    <button type="submit">Pošalji uplatu</button>
+    <a href="/profile" style="margin-left:12px">Natrag</a>
+  </form>
+
+  <script>
+    let roundId = null;
+    let userId = null;
+
+    async function fetchUser(){
+      try {
+        const r = await fetch('/user-status', { credentials: 'same-origin' });
+        if(!r.ok) return null;
+        const j = await r.json();
+        return j.user || null;
+      } catch(e){ return null; }
+    }
+
+     async function fetchCurrentRound() {
+      try {
+        const res = await fetch('/currentRoundData', { credentials: 'same-origin' });
+        if (!res.ok) { el.textContent = 'Failed to load current round'; return; }
+        const json = await res.json();
+        return json.roundId || null;
+      } catch (err) {
+        el.textContent = 'Error loading current round';
+        console.error(err);
+      }
+    }
+
+    (async ()=>{
+      const user = await fetchUser();
+      userId = user.sub;
+      roundId = await fetchCurrentRound();
+    })();
+    
+    function parseAndValidate(id_number, numbersStr){
+      const errors = [];
+      const o = (id_number||'').trim();
+      if(!o) errors.push('Broj osobne iskaznice ili putovnice je obavezan.');
+      if(o.length > 20) errors.push('Broj osobne iskaznice ili putovnice ne smije biti dulji od 20 znakova.');
+
+      if(!numbersStr || !numbersStr.trim()) {
+        errors.push('Brojevi su obavezni.');
+        return { errors };
+      }
+
+      const parts = numbersStr.split(',').map(s => s.trim()).filter(s=>s!=='');
+      const nums = parts.map(p => Number(p));
+      if(parts.length < 6 || parts.length > 10) errors.push('Mora biti između 6 i 10 brojeva.');
+      const invalid = nums.some(n => !Number.isInteger(n) || n < 1 || n > 45);
+      if(invalid) errors.push('Svi brojevi moraju biti cijeli brojevi u rasponu 1-45.');
+      const dupes = parts.length !== new Set(parts).size;
+      if(dupes) errors.push('Ne smiju postojati duplicirani brojevi.');
+      return { errors, numbers: nums, id_number: o };
+    }
+
+    document.getElementById('ticketForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      document.getElementById('error').textContent = '';
+      document.getElementById('success').textContent = '';
+
+      const id_number = document.getElementById('id_number').value;
+      const numbers = document.getElementById('numbers').value;
+
+      const { errors, numbers: nums, id_number: validId_number } = parseAndValidate(id_number, numbers);
+      if(errors && errors.length){
+        document.getElementById('error').textContent = errors.join(' ');
+        return;
+      }
+
+      const payload = {
+        user_id: userId,
+        numbers: nums,
+        round_id: roundId,
+        id_number: validId_number,
+      };
+
+      try {
+        const res = await fetch('/createTicket', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify(payload),
+        });
+        
+        const contentType = res.headers.get('Content-Type') || '';
+        if (contentType.startsWith('image/')) {
+            if(!res.ok){
+            document.getElementById('error').textContent = json.error || json.message || 'Pogreška pri slanju.';
+            return;
+            }
+            const blob = await res.blob();
+            const imgUrl = URL.createObjectURL(blob);
+            const imgEl = document.getElementById('ticketImage');
+            imgEl.src = imgUrl;
+            imgEl.style.display = 'block';
+            document.getElementById('success').textContent = 'Uplata je primljena.';
+            document.getElementById('ticketForm').reset();
+            return;
+        }
+        let json = null;
+        try { json = await res.json(); } catch(e) { json = null; }
+
+        if (!res.ok) {
+            const errMsg = (json && (json.error || json.message)) || await res.text().catch(()=>null) || 'Pogreška pri slanju.';
+            document.getElementById('error').textContent = errMsg;
+            return;
+        }
+
+        document.getElementById('success').textContent = json.message || 'Uplata je primljena.';
+        document.getElementById('ticketForm').reset();
+      } catch(err){
+        document.getElementById('error').textContent = 'Greška pri komunikaciji sa serverom.';
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>

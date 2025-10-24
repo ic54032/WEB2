@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Detalji listića</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;max-width:900px;margin:24px auto;padding:0 16px}
+    h1{margin-bottom:8px}
+    .meta{margin:12px 0}
+    .meta div{margin:6px 0}
+    pre{background:#f6f8fa;padding:12px;border-radius:6px;overflow:auto}
+    img#ticketImage{max-width:320px;margin-top:12px;display:block}
+    .actions{margin-top:12px}
+    button, a.button{padding:8px 12px;border-radius:6px;border:1px solid #ccc;background:#f6f6f6;text-decoration:none;color:inherit;cursor:pointer}
+  </style>
+</head>
+<body>
+  <h1>Detalji listića za kolo <%= data.round.id || '' %></h1>
+
+  <% if (!data) { %>
+    <div>Nema podataka o listiću.</div>
+    <a class="button" href="/profile">Natrag</a>
+  <% } else { %>
+
+    <div class="meta">
+      <div><strong>Listić ID:</strong> <%= data.ticket.id || '' %></div>
+      <div><strong>Datum kreiranja:</strong> <%= data.ticket.created_at || '' %></div>
+      <div><strong>Broj osobne iskaznice ili putovnice :</strong> <%= data.ticket.id_number || '' %></div>
+      <div><strong>Korisnik (user_id):</strong> <%= data.ticket.user_id || data.ticket.user || '' %></div>
+      <div>
+        <strong>Odabrani brojevi:</strong>
+        <% 
+          let nums = data.ticket.numbers;
+          if (typeof nums === 'string') {
+            nums = nums.replace(/^\{|\}$/g, '').trim();
+            nums = nums === '' ? [] : nums.split(',').map(s=>s.trim()).map(Number);
+          }
+          if (!Array.isArray(nums)) nums = [];
+        %>
+        <span><%= nums.length ? nums.join(', ') : '(nema)' %></span>
+      </div>
+
+      <div>
+        <strong>Izvučeni brojevi u kolu:</strong>
+        <% 
+          nums = data.round.drawn_numbers;
+          if (typeof nums === 'string') {
+            nums = nums.replace(/^\{|\}$/g, '').trim();
+            nums = nums === '' ? [] : nums.split(',').map(s=>s.trim()).map(Number);
+          }
+          if (!Array.isArray(nums)) nums = [];
+        %>
+        <span><%= nums.length ? nums.join(', ') : '(nema)' %></span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a class="button" href="/profile">Natrag</a>
+    </div>
+
+  <% } %>
+</body>
+</html>

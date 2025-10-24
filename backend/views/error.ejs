@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Error</title>
+</head>
+<body>
+  <h1>Error 500</h1>
+  <p><%= message %></p>
+  <% if (error && Object.keys(error).length) { %>
+    <pre><%= JSON.stringify(error, null, 2) %></pre>
+  <% } %>
+</body>
+</html>
