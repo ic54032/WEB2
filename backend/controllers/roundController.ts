@@ -7,14 +7,13 @@ export const getRounds = async (req: Request, res: Response) => {
 };
 
 export const createRound = async (req: Request, res: Response) => {
-    const newRound = createNewRoundInDB();
+    const newRound = await createNewRoundInDB();
     res.status(201).json(newRound);
 }
 
 export const closeRound = async (req: Request, res: Response) => {
-    const { roundId } = req.body;
-    deactivateRoundInDb(roundId);
-    res.status(200).json({ message: 'Round ' + roundId + ' closed' });
+    const closedRound = await deactivateRoundInDb();
+    res.status(200).json({ message: 'Round ' + closedRound.id + ' closed' });
 };
 
 export const addRestultsToRound = async (req: Request, res: Response) => {

@@ -10,8 +10,8 @@ export const createNewRoundInDB = async () => {
     return result.rows[0];
 };
 
-export const deactivateRoundInDb = async (roundId: number) => {
-    const result = await pool.query('UPDATE rounds SET is_active = FALSE, closed_at = NOW() WHERE id = $1', [roundId]);
+export const deactivateRoundInDb = async () => {
+    const result = await pool.query('UPDATE rounds SET is_active = FALSE, closed_at = NOW() WHERE is_active = TRUE');
     return result.rows[0];
 };
 
