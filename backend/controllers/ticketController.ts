@@ -11,8 +11,7 @@ dotenv.config();
 export const createTicket = async (req: Request, res: Response) => {
     const ticketData = req.body;
     const uuid = await saveTicketToDB(ticketData);
-
-    const qrUrl = `${process.env.BASE_URL}?uuid=${uuid}`;
+    const qrUrl = `${process.env.BASE_URL}/ticket/${uuid}`;
     const qrImageBuffer = await QRCode.toBuffer(qrUrl);
 
     res.setHeader('Content-Type', 'image/png');
