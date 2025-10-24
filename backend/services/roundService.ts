@@ -11,7 +11,7 @@ export const createNewRoundInDB = async () => {
 };
 
 export const deactivateRoundInDb = async () => {
-    const result = await pool.query('UPDATE rounds SET is_active = FALSE, closed_at = NOW() WHERE is_active = TRUE');
+    const result = await pool.query('UPDATE rounds SET is_active = FALSE, closed_at = NOW() WHERE is_active = TRUE RETURNING *');
     return result.rows[0];
 };
 

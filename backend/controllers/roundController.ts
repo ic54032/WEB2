@@ -13,7 +13,11 @@ export const createRound = async (req: Request, res: Response) => {
 
 export const closeRound = async (req: Request, res: Response) => {
     const closedRound = await deactivateRoundInDb();
-    res.status(200).json({ message: 'Round ' + closedRound.id + ' closed' });
+    var message='No active round to close';
+    if(closedRound != null){
+        message='Round ' + closedRound.id + ' closed';
+    }
+    res.status(200).json({ message: message });
 };
 
 export const addRestultsToRound = async (req: Request, res: Response) => {

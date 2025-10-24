@@ -44,7 +44,7 @@ dotenv.config();
 const createTicket = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const ticketData = req.body;
     const uuid = yield (0, ticketService_1.saveTicketToDB)(ticketData);
-    const qrUrl = `${process.env.BASE_URL}?uuid=${uuid}`;
+    const qrUrl = `${process.env.BASE_URL}/ticket/${uuid}`;
     const qrImageBuffer = yield qrcode_1.default.toBuffer(qrUrl);
     res.setHeader('Content-Type', 'image/png');
     res.send(qrImageBuffer);

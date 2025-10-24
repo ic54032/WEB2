@@ -24,8 +24,8 @@ const createNewRoundInDB = () => __awaiter(void 0, void 0, void 0, function* () 
     return result.rows[0];
 });
 exports.createNewRoundInDB = createNewRoundInDB;
-const deactivateRoundInDb = (roundId) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield database_1.default.query('UPDATE rounds SET is_active = FALSE, closed_at = NOW() WHERE id = $1', [roundId]);
+const deactivateRoundInDb = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield database_1.default.query('UPDATE rounds SET is_active = FALSE, closed_at = NOW() WHERE is_active = TRUE RETURNING *');
     return result.rows[0];
 });
 exports.deactivateRoundInDb = deactivateRoundInDb;

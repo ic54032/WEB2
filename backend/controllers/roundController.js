@@ -17,14 +17,17 @@ const getRounds = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getRounds = getRounds;
 const createRound = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const newRound = (0, roundService_1.createNewRoundInDB)();
+    const newRound = yield (0, roundService_1.createNewRoundInDB)();
     res.status(201).json(newRound);
 });
 exports.createRound = createRound;
 const closeRound = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { roundId } = req.body;
-    (0, roundService_1.deactivateRoundInDb)(roundId);
-    res.status(200).json({ message: 'Round ' + roundId + ' closed' });
+    const closedRound = yield (0, roundService_1.deactivateRoundInDb)();
+    var message = 'No active round to close';
+    if (closedRound != null) {
+        message = 'Round ' + closedRound.id + ' closed';
+    }
+    res.status(200).json({ message: message });
 });
 exports.closeRound = closeRound;
 const addRestultsToRound = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
