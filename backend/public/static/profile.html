@@ -33,12 +33,12 @@
     </div>
 
     <section id="ticketsSection" style="margin-top:18px;">
-      <h2 id="currRoundTitle">Učitavanje...</h2>
-      <div id="ticketsInfo">Učitavanje...</div>
+      <h2 id="currRoundTitle">Trenutno kolo</h2>
+      <div id="ticketsInfo">Nema uplaćenih listića za trenutno kolo.</div>
     </section>
 
     <section id="roundSection" style="margin-top:18px;">
-    <div id="roundInfo">Učitavanje...</div>
+    <div id="roundInfo">Nema izvučenih brojeva za trenutno kolo.</div>
   </section>
 
   <div class="actions">
@@ -82,17 +82,16 @@
       const el = document.getElementById('roundInfo');
       const currRoundTitle = document.getElementById('currRoundTitle');
 
-      el.textContent = 'Učitavanje...';
       try {
+        el.textContent = 'Učitavanje...';
         const res = await fetch('/currentRoundData', { credentials: 'same-origin' });
         if (!res.ok) { el.textContent = 'Neuspješno učitavanje trenutnog kola'; return; }
         const json = await res.json();
-        
-        currRoundTitle.textContent = 'Trenutno kolo ID: ' + (json.roundId != null ? json.roundId : '(none)');
+        currRoundTitle.textContent = 'Trenutno kolo ID: ' + (json.id != null ? json.id : '(none)');
         const payBtn = document.getElementById('btnPay');
-        const drawn = Array.isArray(json.drawnNumbers) ? json.drawnNumbers : [];
+        const drawn = Array.isArray(json.drawn_numbers) ? json.drawn_numbers : [];
 
-        if (drawn.length > 0) {
+        if (drawn.length > 0 && json.is_active == false) {
           el.textContent = `Izvučeni brojevi za trenutno kolo: ${drawn.join(', ')}`;
           if (payBtn) payBtn.classList.add('hidden');
         } else {
@@ -107,7 +106,6 @@
 
     async function fetchTicketsForUser(id) {
       const infoEl = document.getElementById('ticketsInfo');
-      infoEl.textContent = 'Učitavanje...';
       try {
         const res = await fetch(`/tickets/${encodeURIComponent(id)}`, { credentials: 'same-origin' });
         if (!res.ok) {

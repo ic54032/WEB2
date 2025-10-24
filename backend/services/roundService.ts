@@ -15,15 +15,21 @@ export const deactivateRoundInDb = async () => {
     return result.rows[0];
 };
 
-export const addResultToRoundInDb = async (roundId: number, resultData: any) => {
-    const result = await pool.query('UPDATE rounds SET drawn_numbers = $2, draw_date = NOW() WHERE id = $1', [roundId, resultData]);
+export const addResultToRoundInDb = async (resultData: any) => {
+    console.log('Adding result to round:', resultData);
+    const result = await pool.query('UPDATE rounds SET drawn_numbers = $1, draw_date = NOW() WHERE is_active = TRUE AND drawn_numbers IS NULL RETURNING *', [resultData]);
     return result.rows[0];
 };
 
+export const getActiveRoundFromDB = async () => {
+    const result = await pool.query('SELECT * FROM rounds WHERE is_active = TRUE');
+    return result.rows;
+}
+
 export const getRoundDataFromDb = async (): Promise<{
-roundId: number | null;
-isActive: boolean | null;
-drawnNumbers: any[];
+id: number | null;
+is_active: boolean | null;
+drawn_numbers: any[];
 }> => {
     const sql = `
     SELECT r.id,
@@ -36,17 +42,17 @@ drawnNumbers: any[];
     const result = await pool.query(sql);
     console.log('Round data:', result.rows);
     if (result.rowCount === 0) {
-        return { roundId: null, isActive: null, drawnNumbers: [] };
+        return { id: null, is_active: null, drawn_numbers: [] };
     }
 
     const row = result.rows[0];
-    const roundId = row.id;
-    const isActive = row.is_active === true;
-    const drawnNumbers = row.drawn_numbers;
+    const id = row.id;
+    const is_active = row.is_active === true;
+    const drawn_numbers = row.drawn_numbers;
 
     return {
-        roundId,
-        isActive,
-        drawnNumbers
+        id: id,
+        is_active,
+        drawn_numbers
     };
 };

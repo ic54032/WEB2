@@ -44,12 +44,16 @@
       <div>
         <strong>Izvučeni brojevi u kolu:</strong>
         <% 
-          nums = data.round.drawn_numbers;
-          if (typeof nums === 'string') {
-            nums = nums.replace(/^\{|\}$/g, '').trim();
-            nums = nums === '' ? [] : nums.split(',').map(s=>s.trim()).map(Number);
+          if(data.round.is_active == false){
+            nums = data.round.drawn_numbers;
+            if (typeof nums === 'string') {
+              nums = nums.replace(/^\{|\}$/g, '').trim();
+              nums = nums === '' ? [] : nums.split(',').map(s=>s.trim()).map(Number);
+            }
+            if (!Array.isArray(nums)) nums = [];
+          } else {
+            nums = [];
           }
-          if (!Array.isArray(nums)) nums = [];
         %>
         <span><%= nums.length ? nums.join(', ') : '(nema)' %></span>
       </div>

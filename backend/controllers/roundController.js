@@ -17,30 +17,38 @@ const getRounds = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getRounds = getRounds;
 const createRound = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const existingActiveRounds = yield (0, roundService_1.getActiveRoundFromDB)();
+    if (existingActiveRounds.length > 0) {
+        return res.status(204).send();
+    }
     const newRound = yield (0, roundService_1.createNewRoundInDB)();
     res.status(201).json(newRound);
 });
 exports.createRound = createRound;
 const closeRound = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const closedRound = yield (0, roundService_1.deactivateRoundInDb)();
-    var message = 'No active round to close';
-    if (closedRound != null) {
-        message = 'Round ' + closedRound.id + ' closed';
+    if (!closedRound || closedRound.length === 0) {
+        res.status(204).send();
     }
-    res.status(200).json({ message: message });
+    else {
+        res.status(200).json({ message: 'Round ' + closedRound.id + ' closed' });
+    }
 });
 exports.closeRound = closeRound;
 const addRestultsToRound = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { roundId, resultData } = req.body;
-    (0, roundService_1.addResultToRoundInDb)(roundId, resultData);
-    res.status(200).json({ message: 'Results added to round ' + roundId + ', ' + resultData });
+    const { resultData } = req.body;
+    const writtenRows = (0, roundService_1.addResultToRoundInDb)(resultData);
+    if (!writtenRows) {
+        return res.status(400).json({ message: 'No active round found to add results' });
+    }
+    res.status(204).send();
 });
 exports.addRestultsToRound = addRestultsToRound;
 const getRoundData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     (0, roundService_1.getRoundDataFromDb)().then((data) => {
         res.status(200).json(data);
     }).catch((error) => {
-        res.status(500).json({ message: 'Error retrieving round data', error });
+        res.status(400).json({ message: 'Error retrieving round data', error });
     });
 });
 exports.getRoundData = getRoundData;

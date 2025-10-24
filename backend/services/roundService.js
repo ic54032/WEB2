@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getRoundDataFromDb = exports.addResultToRoundInDb = exports.deactivateRoundInDb = exports.createNewRoundInDB = exports.getAllRoundsFromDb = void 0;
+exports.getRoundDataFromDb = exports.getActiveRoundFromDB = exports.addResultToRoundInDb = exports.deactivateRoundInDb = exports.createNewRoundInDB = exports.getAllRoundsFromDb = void 0;
 const database_1 = __importDefault(require("../database/database"));
 const getAllRoundsFromDb = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield database_1.default.query('SELECT * FROM rounds');
@@ -29,11 +29,17 @@ const deactivateRoundInDb = () => __awaiter(void 0, void 0, void 0, function* ()
     return result.rows[0];
 });
 exports.deactivateRoundInDb = deactivateRoundInDb;
-const addResultToRoundInDb = (roundId, resultData) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield database_1.default.query('UPDATE rounds SET drawn_numbers = $2, draw_date = NOW() WHERE id = $1', [roundId, resultData]);
+const addResultToRoundInDb = (resultData) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('Adding result to round:', resultData);
+    const result = yield database_1.default.query('UPDATE rounds SET drawn_numbers = $1, draw_date = NOW() WHERE is_active = TRUE AND drawn_numbers IS NULL RETURNING *', [resultData]);
     return result.rows[0];
 });
 exports.addResultToRoundInDb = addResultToRoundInDb;
+const getActiveRoundFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield database_1.default.query('SELECT * FROM rounds WHERE is_active = TRUE');
+    return result.rows;
+});
+exports.getActiveRoundFromDB = getActiveRoundFromDB;
 const getRoundDataFromDb = () => __awaiter(void 0, void 0, void 0, function* () {
     const sql = `
     SELECT r.id,
@@ -46,16 +52,16 @@ const getRoundDataFromDb = () => __awaiter(void 0, void 0, void 0, function* () 
     const result = yield database_1.default.query(sql);
     console.log('Round data:', result.rows);
     if (result.rowCount === 0) {
-        return { roundId: null, isActive: null, drawnNumbers: [] };
+        return { id: null, is_active: null, drawn_numbers: [] };
     }
     const row = result.rows[0];
-    const roundId = row.id;
-    const isActive = row.is_active === true;
-    const drawnNumbers = row.drawn_numbers;
+    const id = row.id;
+    const is_active = row.is_active === true;
+    const drawn_numbers = row.drawn_numbers;
     return {
-        roundId,
-        isActive,
-        drawnNumbers
+        id: id,
+        is_active,
+        drawn_numbers
     };
 });
 exports.getRoundDataFromDb = getRoundDataFromDb;

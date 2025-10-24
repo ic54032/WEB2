@@ -50,7 +50,7 @@
         const res = await fetch('/currentRoundData', { credentials: 'same-origin' });
         if (!res.ok) { el.textContent = 'Failed to load current round'; return; }
         const json = await res.json();
-        return json.roundId || null;
+        return json.id || null;
       } catch (err) {
         el.textContent = 'Error loading current round';
         console.error(err);
