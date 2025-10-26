@@ -31,7 +31,7 @@ const deactivateRoundInDb = () => __awaiter(void 0, void 0, void 0, function* ()
 exports.deactivateRoundInDb = deactivateRoundInDb;
 const addResultToRoundInDb = (resultData) => __awaiter(void 0, void 0, void 0, function* () {
     console.log('Adding result to round:', resultData);
-    const result = yield database_1.default.query('UPDATE rounds SET drawn_numbers = $1, draw_date = NOW() WHERE is_active = TRUE AND drawn_numbers IS NULL RETURNING *', [resultData]);
+    const result = yield database_1.default.query('UPDATE rounds SET drawn_numbers = $1, draw_date = NOW() WHERE is_active = false AND drawn_numbers IS NULL RETURNING *', [resultData]);
     return result.rows[0];
 });
 exports.addResultToRoundInDb = addResultToRoundInDb;

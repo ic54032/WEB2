@@ -26,11 +26,14 @@ export const closeRound = async (req: Request, res: Response) => {
 
 export const addRestultsToRound = async (req: Request, res: Response) => {
     const { resultData }  = req.body;
-    const writtenRows = addResultToRoundInDb(resultData);
+
+    const writtenRows = await addResultToRoundInDb(resultData);
+
     if (!writtenRows) {
-        return res.status(400).json({ message: 'No active round found to add results' });
+        return res.status(400).json({ error: 'No eligible round found or draw already completed' });
     }
-    res.status(204).send();
+
+    return res.status(204).send();
 };
 
 export const getRoundData = async (req: Request, res: Response) => {

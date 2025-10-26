@@ -20,7 +20,6 @@ router.get('/tickets/:userId', ticketController_1.getUserTicketsForCurrentRound)
 router.get('/ticket/:ticketId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log('Rendering ticket details for ticketId:', req.params.ticketId);
     const data = yield (0, ticketController_1.showTicketDetails)(req.params.ticketId);
-    console.log('Data to render:', data);
     res.render('ticket', { data });
     return;
 }));

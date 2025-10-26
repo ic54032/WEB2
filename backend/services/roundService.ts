@@ -17,7 +17,7 @@ export const deactivateRoundInDb = async () => {
 
 export const addResultToRoundInDb = async (resultData: any) => {
     console.log('Adding result to round:', resultData);
-    const result = await pool.query('UPDATE rounds SET drawn_numbers = $1, draw_date = NOW() WHERE is_active = TRUE AND drawn_numbers IS NULL RETURNING *', [resultData]);
+    const result = await pool.query('UPDATE rounds SET drawn_numbers = $1, draw_date = NOW() WHERE is_active = false AND drawn_numbers IS NULL RETURNING *', [resultData]);
     return result.rows[0];
 };
 

@@ -37,11 +37,11 @@ const closeRound = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.closeRound = closeRound;
 const addRestultsToRound = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { resultData } = req.body;
-    const writtenRows = (0, roundService_1.addResultToRoundInDb)(resultData);
+    const writtenRows = yield (0, roundService_1.addResultToRoundInDb)(resultData);
     if (!writtenRows) {
-        return res.status(400).json({ message: 'No active round found to add results' });
+        return res.status(400).json({ error: 'No eligible round found or draw already completed' });
     }
-    res.status(204).send();
+    return res.status(204).send();
 });
 exports.addRestultsToRound = addRestultsToRound;
 const getRoundData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
