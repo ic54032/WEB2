@@ -91,12 +91,16 @@
         const payBtn = document.getElementById('btnPay');
         const drawn = Array.isArray(json.drawn_numbers) ? json.drawn_numbers : [];
 
-        if (drawn.length > 0 && json.is_active == false) {
-          el.textContent = `Izvučeni brojevi za trenutno kolo: ${drawn.join(', ')}`;
+        if (json.is_active == true) {
+          if (payBtn) payBtn.classList.remove('hidden'); 
+        } else {
           if (payBtn) payBtn.classList.add('hidden');
+        }
+
+        if (drawn.length > 0) {
+          el.textContent = `Izvučeni brojevi za trenutno kolo: ${drawn.join(', ')}`;
         } else {
           el.textContent = 'Nema izvučenih brojeva za trenutno kolo.';
-          if (payBtn) payBtn.classList.remove('hidden'); 
         }
       } catch (err) {
         el.textContent = 'Greška prilikom učitavanja trenutnog kola';
